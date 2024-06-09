@@ -219,9 +219,8 @@
             cursor: pointer;
             transition: background-color 0.3s;
             /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); */
-            width: auto;
-            height: auto;
-            /* border: 1px solid black; */
+            width: 50px;
+            height: 50px;
 
         }
 
@@ -232,7 +231,10 @@
         }
 
         #layerButton.active {
+            padding: 1px;
             background-color: white;
+            border: 1px solid black;
+
         }
     </style>
 </head>
@@ -495,7 +497,7 @@
             .then(data => {
                 var coordinates = data;
                 polyline = L.polyline(coordinates, { color: 'black', weight: 2 }).addTo(map);
-                map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
+                map.fitBounds(polyline.getBounds(), { padding: [30, 30, 30, 30] });
 
                 sourceLocation = coordinates[0];
                 var sourceMarker = L.marker(sourceLocation, {
