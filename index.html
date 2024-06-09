@@ -487,11 +487,6 @@
             zoomSnap: 0.25 // Adjust this value as needed
         }).setView([0, 0], 19);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-        }).addTo(map);
-
-
         fetch('coordinates.json')
             .then(response => response.json())
             .then(data => {
