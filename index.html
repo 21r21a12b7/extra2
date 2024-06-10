@@ -115,10 +115,10 @@
         }
 
         .floating-button {
-            position: fixed;
+            position: absolute;
             right: 0;
-            top: 33%;
-            transform: translateY(-30%);
+            /* top: 70px; */
+            transform: translateY(calc(50px + 15px)); /* Adjusted to be 15px below #layerButton */
             background-color: #3D408A;
             color: white;
             padding: 8px 19px;
@@ -271,21 +271,21 @@
             <div id="layerButton" onclick="toggleMapLayer()">
                 <img id="layerButtonImg" src="img/toSatellite.png" alt="Layers">
             </div>
-        </div>
-    </div>
-    <img class="follow-marker-button" src="img/follow.svg" alt="Follow Marker" onclick="toggleFollowMarker()">
-    <div class="floating-button" id="isInBus">
-        <div class="button-content">
-            <span id="buttonText"><img src="img/left.png" alt="Left Arrow" width="15" height="15"></span>
-            <div class="toggle-content" id="toggleContent">
-                <span>In Bus?</span>
-                <label class="switch">
-                    <input type="checkbox" id="toggleSwitch">
-                    <span class="slider round"></span>
-                </label>
+            <div class="floating-button" id="isInBus">
+                <div class="button-content">
+                    <span id="buttonText"><img src="img/left.png" alt="Left Arrow" width="15" height="15"></span>
+                    <div class="toggle-content" id="toggleContent">
+                        <span>In Bus?</span>
+                        <label class="switch">
+                            <input type="checkbox" id="toggleSwitch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <img class="follow-marker-button" src="img/follow.svg" alt="Follow Marker" onclick="toggleFollowMarker()">
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
     <script>
@@ -387,7 +387,10 @@
                                 animate: true,
                             });
                             map.once('zoomend', function () {
-                                polyline.setStyle({ weight: 2 });
+                                polyline.setStyle({ weight: 3 });
+                                shouldFollowMarker = true;
+                                document.querySelector('.follow-marker-button').style.backgroundColor = 'white';
+
                             });
                         });
                     } else {
@@ -445,7 +448,8 @@
                 animate: true,
             });
             map.once('zoomend', function () {
-                polyline.setStyle({ weight: 2 });
+                polyline.setStyle({ weight: 3 });
+                document.querySelector('.follow-marker-button').style.backgroundColor = 'white';
             });
         }
 
@@ -491,7 +495,7 @@
             .then(response => response.json())
             .then(data => {
                 var coordinates = data;
-                polyline = L.polyline(coordinates, { color: 'black', weight: 2 }).addTo(map);
+                polyline = L.polyline(coordinates, { color: 'black', weight: 3 }).addTo(map);
                 map.fitBounds(polyline.getBounds(), { padding: [30, 30, 30, 30] });
 
                 sourceLocation = coordinates[0];
@@ -509,7 +513,7 @@
                         animate: true,
                     });
                     map.once('zoomend', function () {
-                        polyline.setStyle({ weight: 2 });
+                        polyline.setStyle({ weight: 3 });
                     });
                 });
 
@@ -528,7 +532,7 @@
                         animate: true,
                     });
                     map.once('zoomend', function () {
-                        polyline.setStyle({ weight: 2 });
+                        polyline.setStyle({ weight: 3 });
                     });
                 });
 
@@ -556,7 +560,7 @@
             } else {
                 map.removeLayer(satelliteLayer);
                 map.addLayer(streetLayer);
-                polyline.setStyle({ color: 'black', weight: 2 });
+                polyline.setStyle({ color: 'black', weight: 3 });
                 document.getElementById('layerButtonImg').src = 'img/toSatellite.png';
                 document.getElementById('layerButton').classList.remove('active');
             }
@@ -580,11 +584,11 @@
                 animate: true,
             });
             map.once('zoomend', function () {
-                polyline.setStyle({ weight: 2 });
+                polyline.setStyle({ weight: 3 });
             });
         });
 
-        map.on('click', function () {
+        map.on('zoomstart', function () {
             shouldFollowMarker = false;
             console.log(shouldFollowMarker);
             document.querySelector('.follow-marker-button').style.backgroundColor = 'yellow';
